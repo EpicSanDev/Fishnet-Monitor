@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # Serveur MongoDB pour stocker les données
+  mongo:
+    image: mongo:6
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - fishnet-network
+
+  # Serveur backend
+  server:
+    build:
+      context: ./server
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - MONGODB_URI=mongodb://mongo:27017/fishnet-monitor
+      - NODE_ENV=production
+      - DATA_RETENTION_DAYS=30
+    depends_on:
+      - mongo
+    networks:
+      - fishnet-network
+    restart: always
+
+  # Interface web
+  web:
+    build:
+      context: ./web
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - fishnet-network
+    restart: always
+
+networks:
+  fishnet-network:
+    driver: bridge
+
+volumes:
+  mongo-data:

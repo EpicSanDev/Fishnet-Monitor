@@ -1,0 +1,17 @@
+[Unit]
+Description=Fishnet Monitor Agent
+After=network.target
+
+[Service]
+Type=simple
+User=fishnet
+ExecStart=/usr/bin/python3 /opt/fishnet-agent/fishnet-agent.py
+Restart=always
+RestartSec=10
+Environment=FISHNET_MONITOR_URL=http://votre-dashboard-server:3000/api/stats
+Environment=FISHNET_MONITOR_NAME=%H
+Environment=FISHNET_MONITOR_INTERVAL=30
+Environment=FISHNET_PROCESS_NAME=fishnet
+
+[Install]
+WantedBy=multi-user.target

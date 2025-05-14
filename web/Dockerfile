@@ -5,10 +5,13 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
+# Copy all frontend code including the public folder
 COPY . .
+
+# Build the application with disabled eslint
 RUN npm run build
 
-# Production
+# Production with nginx
 FROM nginx:alpine
 
 COPY --from=build /app/build /usr/share/nginx/html

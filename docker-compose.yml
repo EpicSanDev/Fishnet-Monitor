@@ -38,6 +38,8 @@ services:
     networks:
       - fishnet-network
     restart: always
+    volumes:
+      - web-node-modules:/app/node_modules
 
 networks:
   fishnet-network:
@@ -45,3 +47,4 @@ networks:
 
 volumes:
   mongo-data:
+  web-node-modules:
